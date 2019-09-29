@@ -9,3 +9,6 @@ Route::group(['prefix' => 'auth'], function () {
 
 });
 
+Route::group(['prefix' => 'manage'], function () {
+    Route::apiResource('/product', 'ProductController');
+});

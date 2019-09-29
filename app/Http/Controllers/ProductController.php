@@ -2,10 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Model\Product;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class ProductController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('jwt')->except(['index', 'show']);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -34,7 +41,15 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'user_id' => 'required | numeric | max:10',
+            'product_name' => 'required | string | max:191',
+            'price' => 'required | numeric',
+            'quantity' => 'required | numeric'
+        ]);
+
+        Product::create($request->all());
+        return response('New product added!', Response::HTTP_CREATED);
     }
 
     /**
